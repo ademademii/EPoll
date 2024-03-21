@@ -1,0 +1,6 @@
+@ExitPoll_HostAddress = http://localhost:5207
+
+GET {{ExitPoll_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
