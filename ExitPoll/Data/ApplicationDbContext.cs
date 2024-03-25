@@ -15,9 +15,11 @@ namespace ExitPoll.Data
         public DbSet<Project> Projects { get; set; }
         public DbSet<State> States { get; set; }
         public DbSet<City> Cities { get; set; }
-
         public DbSet<PollingPlace> PollingPlaces { get; set;}
 
+        public DbSet<Voter> Voters { get; set; }
+
+        public DbSet<Vote> Votes { get; set; }
 
 
     }
