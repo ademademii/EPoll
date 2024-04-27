@@ -3,8 +3,10 @@
     public class VoteViewModel
     {
         public int Id { get; set; }
+        public string AgeGroup { get; set; }
+        public char Gender { get; set; }
 
-        public int VoterId { get; set; }
-        public int CandidateId { get; set; }
+        public int PollingPlaceId {  get; set; }
+        public int PartyId { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using ExitPoll.Data;
-using ExitPoll.Migrations;
 using ExitPoll.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -54,8 +54,11 @@ namespace ExitPoll.Controllers
             {
                 var vote = new Vote
                 {
-                    VoterId = voteVM.Id,
-                    CandidateId = voteVM.CandidateId
+
+                    AgeGroup = voteVM.AgeGroup,
+                    Gender = voteVM.Gender,
+                    PollingPlaceId = voteVM.PollingPlaceId,
+                    PartyId = voteVM.PartyId
                 };
                 _db.Votes.Add(vote);
                 await _db.SaveChangesAsync();
@@ -71,8 +74,7 @@ namespace ExitPoll.Controllers
             var vote = await _db.Votes.FindAsync(id);
             if(ModelState.IsValid)
             {
-                vote.VoterId= voteVM.Id;
-                vote.CandidateId = voteVM.CandidateId;
+                vote.PartyId = voteVM.PartyId;
                 await _db.SaveChangesAsync();
                 return Ok("Vote updated successfully...");
             }

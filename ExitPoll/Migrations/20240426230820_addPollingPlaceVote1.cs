@@ -5,7 +5,7 @@
 namespace ExitPoll.Migrations
 {
     /// <inheritdoc />
-    public partial class PollinPlaceAdded : Migration
+    public partial class addPollingPlaceVote1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

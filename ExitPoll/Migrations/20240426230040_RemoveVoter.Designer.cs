@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExitPoll.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240324134906_PollinPlaceAdded")]
-    partial class PollinPlaceAdded
+    [Migration("20240426230040_RemoveVoter")]
+    partial class RemoveVoter
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,6 +59,30 @@ namespace ExitPoll.Migrations
                     b.HasIndex("StateId");
 
                     b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("ExitPoll.Models.Party", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("FoundingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Ideology")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Parties");
                 });
 
             modelBuilder.Entity("ExitPoll.Models.PollingPlace", b =>
@@ -152,6 +176,32 @@ namespace ExitPoll.Migrations
                     b.ToTable("States");
                 });
 
+            modelBuilder.Entity("ExitPoll.Models.Vote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AgeGroup")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("Votes");
+                });
+
             modelBuilder.Entity("ExitPoll.Models.City", b =>
                 {
                     b.HasOne("ExitPoll.Models.State", "State")
@@ -183,6 +233,17 @@ namespace ExitPoll.Migrations
                         .IsRequired();
 
                     b.Navigation("State");
+                });
+
+            modelBuilder.Entity("ExitPoll.Models.Vote", b =>
+                {
+                    b.HasOne("ExitPoll.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
                 });
 
             modelBuilder.Entity("ExitPoll.Models.State", b =>
