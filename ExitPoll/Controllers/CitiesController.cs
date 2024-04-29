@@ -1,6 +1,7 @@
 ﻿using ExitPoll.Data;
 using ExitPoll.Models;
 using ExitPoll.Models.ViewModels;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,9 @@ namespace ExitPoll.Controllers
         {
             _db=db;
         }
+
+
+        [EnableCors("AllowOrigin")]
         // GET: api/<CitiesController>
         [HttpGet]
         public async Task<IActionResult> Get(string sort="asc")
