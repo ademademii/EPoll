@@ -67,18 +67,18 @@ namespace ExitPoll.Controllers
 
         // PUT api/<ProjectsController>/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Project project)
+        public IActionResult Put(int id, [FromBody] ProjectViewModel projectVM)
         {
             var entity = _db.Projects.Find(id);
             if (entity == null)
             {
                 return BadRequest(ModelState);
             }
-            entity.Name = project.Name;
-            entity.Description=project.Description;
-            entity.StartDate = project.StartDate;
-            entity.EndDate = project.EndDate;
-            entity.Status = project.Status;
+            entity.Name = projectVM.Name;
+            entity.Description= projectVM.Description;
+            entity.StartDate = projectVM.StartDate;
+            entity.EndDate = projectVM.EndDate;
+            entity.Status = projectVM.Status;
             _db.SaveChanges();
             return Ok("Updated successfully...");
 
