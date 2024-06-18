@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using System.Threading.Tasks;
 using ExitPoll.Data;
+using System.Runtime.CompilerServices;
 
 public class ResultsController : ControllerBase
 {
@@ -25,5 +26,30 @@ public class ResultsController : ControllerBase
 
         return Ok(result);
     }
+
+    //[HttpGet("CountVotesPerParty")]
+    //public async Task<IActionResult> CountVotesPerParty(string partyNameInput)
+    //{
+    //    var partyName = await _db.Parties.FirstOrDefaultAsync(p => p.Name.Equals(partyNameInput));
+
+    //    return Ok(partyName);
+    //}
+
+
+    //[HttpGet("CountVotesPerParty")]
+    //public async Task<IActionResult> CountVotesPerParty(string partyNameInput)
+    //{
+    //    var party = await _db.Parties.Include(p => p.Votes)
+    //                                  .FirstOrDefaultAsync(p => p.Name.Equals(partyNameInput));
+
+    //    if (party == null)
+    //    {
+    //        return NotFound("Party not found");
+    //    }
+
+    //    int voteCount = party.Votes.Count;
+
+    //    return Ok(voteCount);
+    //}
 
 }

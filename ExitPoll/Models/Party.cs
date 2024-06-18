@@ -7,6 +7,5 @@
         public string Ideology { get; set; }
         public DateTime FoundingDate { get; set; }
 
- 
     }
 }

@@ -49,6 +49,11 @@ namespace ExitPoll.Controllers
         {
             var city = await _db.Cities.FindAsync(id);
 
+            if(city == null)
+            {
+                return BadRequest("This object does not exist in the database...");
+            }    
+
             return Ok(city);
         }
 
@@ -88,11 +93,11 @@ namespace ExitPoll.Controllers
                 };
                 _db.Cities.Add(city);
                 await _db.SaveChangesAsync();
-                return Ok("City created successfully...");
+                return Ok("Created successfully...");
             }
             else
             {
-                return BadRequest("City not created...");
+                return BadRequest("Creation failed. Please check the data and try again...");
             }
         }
 
@@ -112,11 +117,11 @@ namespace ExitPoll.Controllers
                 entity.StateId = cityVM.StateId;
                 _db.Cities.Update(entity);
                 await _db.SaveChangesAsync();
-                return Ok("City updated successfully...");
+                return Ok("Updated successfully...");
             }
             else
             {
-                return BadRequest("Qyteti nuk është modifikuar");
+                return BadRequest("Update failed. Please check the data and try again...");
             }
         }
 
@@ -127,11 +132,11 @@ namespace ExitPoll.Controllers
             var city = await _db.Cities.FindAsync(id);
             if(city == null)
             {
-                return BadRequest("No record founded to delete");
+                return BadRequest("No records found to delete...");
             }
             _db.Cities.Remove(city);
             await _db.SaveChangesAsync();
-            return Ok("City deleted successfully...");
+            return Ok("Deleted successfully...");
 
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace ExitPoll.Models.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ExitPoll.Models.ViewModels
 {
     public class VoteViewModel
     {

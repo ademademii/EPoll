@@ -3,6 +3,7 @@ using ExitPoll.Models;
 using ExitPoll.Models.ViewModels;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -30,9 +31,10 @@ namespace ExitPoll.Controllers
 
         // GET api/<StatesController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var state = await _db.States.FindAsync(id);
+            return Ok(state);
         }
 
 
@@ -54,22 +56,47 @@ namespace ExitPoll.Controllers
             }
             else
             {
-                return BadRequest("Nuk u krijua");
+                return BadRequest("Has not been created");
             }
 
            
         }
 
+        
+
         // PUT api/<StatesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] StateViewModel stateViewModel)
         {
+            var stateId = await _db.States.FindAsync(id);
+            if (ModelState.IsValid)
+            {
+                stateId.Name = stateViewModel.Name;
+                stateId.Population = stateViewModel.Population; 
+                _db.States.Update(stateId);
+                await _db.SaveChangesAsync();
+                return Ok("Update sucessfully...");
+
+            }
+            else
+            {
+                return BadRequest(ModelState);   
+            }
+
         }
 
         // DELETE api/<StatesController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            var state = await _db.States.FindAsync(id);
+            if(state == null)
+            {
+                return BadRequest("State doesn't exists or been delted...");
+            }
+            _db.States.Remove(state);
+            await _db.SaveChangesAsync();
+            return Ok("State deleted successfully...");
         }
     }
 }

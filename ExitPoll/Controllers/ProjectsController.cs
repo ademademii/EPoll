@@ -54,13 +54,13 @@ namespace ExitPoll.Controllers
 
                 _db.Projects.Add(project);
                 await _db.SaveChangesAsync();
-                return Ok("Created");
+                return Ok("Created successfully...");
 
                 
             }
             else
             {
-                return BadRequest("Nuk u krijua Projekti");
+                return BadRequest("Creation failed. Please check the data and try again...");
             }
             
         }
@@ -80,7 +80,7 @@ namespace ExitPoll.Controllers
             entity.EndDate = project.EndDate;
             entity.Status = project.Status;
             _db.SaveChanges();
-            return Ok("Updated Successfully");
+            return Ok("Updated successfully...");
 
         }
 

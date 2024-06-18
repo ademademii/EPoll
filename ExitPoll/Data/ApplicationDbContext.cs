@@ -19,5 +19,7 @@ namespace ExitPoll.Data
         public DbSet<Vote> Votes { get; set; }
         public DbSet<Party> Parties { get; set; }
 
+
+
     }
 }

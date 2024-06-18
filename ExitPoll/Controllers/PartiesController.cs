@@ -39,10 +39,27 @@ namespace ExitPoll.Controllers
 
         // GET api/<PartiesController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var party = await _db.Parties.FindAsync(id);
+
+            if(party == null)
+            {
+                return BadRequest("This object does not exist in the database...");
+            }    
+
+            return Ok(party);
         }
+
+
+        [HttpGet]
+        [Route("Search/{search=}")]
+        public async Task<IActionResult> Search(string search)
+        {
+            IQueryable<Party> parties = _db.Parties.Where(x=>x.Name.Contains(search));
+            return Ok(parties);
+        }
+
 
         // POST api/<PartiesController>
         [HttpPost]
@@ -59,24 +76,51 @@ namespace ExitPoll.Controllers
                 };
                 _db.Parties.Add(party);
                 await _db.SaveChangesAsync();
-                return Ok("Party created successfully...");
+                return Ok("Created successfully...");
             }
             else
             {
-                return BadRequest("Party not created...");
+                return BadRequest("Creation failed. Please check the data and try again...");
             }
         }
 
         // PUT api/<PartiesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] Party party)
         {
+            var entity = await _db.Parties.FindAsync(id);
+
+            if(ModelState.IsValid)
+            {
+                entity.Name = party.Name;
+                entity.Ideology = party.Ideology;
+                entity.FoundingDate = party.FoundingDate;
+                _db.Parties.Update(entity);
+                await _db.SaveChangesAsync();
+                return Ok("Updated successfully...");
+            }
+            else
+            {
+                return BadRequest("Update failed. Please check the data and try again...");
+            }
+
         }
 
         // DELETE api/<PartiesController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            var party = await _db.Parties.FindAsync(id);
+            if (party == null)
+            {
+                return BadRequest("No records found to delete...");
+            }
+            else
+            {
+                _db.Parties.Remove(party);
+                await _db.SaveChangesAsync();
+                return Ok("Deleted successfully...");
+            }
         }
     }
 }

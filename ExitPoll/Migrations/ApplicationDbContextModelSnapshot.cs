@@ -195,16 +195,11 @@ namespace ExitPoll.Migrations
                     b.Property<int>("PollingPlaceId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PartyId");
 
                     b.HasIndex("PollingPlaceId");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("Votes");
                 });
@@ -256,17 +251,9 @@ namespace ExitPoll.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ExitPoll.Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Party");
 
                     b.Navigation("PollingPlace");
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("ExitPoll.Models.State", b =>
