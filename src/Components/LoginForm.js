@@ -60,7 +60,7 @@ export default function LoginForm(){
                     </Form.Group>
 
                     <Button variant="light" type="submit" className="w-100">
-                        Login!!!
+                        Login
                     </Button>
                 </Form>
 
