@@ -1,22 +1,35 @@
-import { useState, useEffect } from 'react';
-import { Container, Form, Button, Alert, Row, Col } from 'react-bootstrap';
+// SurveyForm.js
+import React, { useState, useEffect } from 'react';
+import { Container, Form, Alert, Row, Col } from 'react-bootstrap';
 import dynamicFetch from '@/helpers/dynamicfetch';
+import CitySelection from './CitySelection';
+import PollingPlaceSelection from './PollingPlaceSelection';
+import CheckboxGroup from './CheckboxGroup';
+import SubmitButton from './SubmitButton';
+import PartiesSelection from './PartiesSelection'; // Import PartiesSelection component
 
 const SurveyForm = () => {
+    const [cities, setCities] = useState([]);
     const [pollingPlaces, setPollingPlaces] = useState([]);
+    const [filteredPollingPlaces, setFilteredPollingPlaces] = useState([]);
     const [parties, setParties] = useState([]);
     const [surveyData, setSurveyData] = useState({
+        cityId: '',
         age: '',
         gender: '',
         pollingPlaceId: '',
         partyId: ''
     });
+    const [selectedCityId, setSelectedCityId] = useState('');
+    const [selectedPollingPlaceId, setSelectedPollingPlaceId] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const citiesData = await dynamicFetch('https://localhost:44338/api/Cities', 'GET');
+                setCities(citiesData);
 
                 const pollingPlacesData = await dynamicFetch('https://localhost:44338/api/PollingPlaces', 'GET');
                 setPollingPlaces(pollingPlacesData);
@@ -29,7 +42,28 @@ const SurveyForm = () => {
             }
         };
         fetchData();
+
+        const storedCityId = localStorage.getItem('selectedCityId');
+        const storedPollingPlaceId = localStorage.getItem('selectedPollingPlaceId');
+        if (storedCityId && storedPollingPlaceId) {
+            setSelectedCityId(storedCityId);
+            setSelectedPollingPlaceId(storedPollingPlaceId);
+            setSurveyData({
+                ...surveyData,
+                cityId: storedCityId,
+                pollingPlaceId: storedPollingPlaceId
+            });
+        }
     }, []);
+
+    useEffect(() => {
+        if (surveyData.cityId) {
+            const filteredPlaces = pollingPlaces.filter(place => place.cityId === parseInt(surveyData.cityId));
+            setFilteredPollingPlaces(filteredPlaces);
+        } else {
+            setFilteredPollingPlaces(pollingPlaces);
+        }
+    }, [surveyData.cityId, pollingPlaces]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -37,9 +71,15 @@ const SurveyForm = () => {
             ...surveyData,
             [name]: value
         });
-    };
 
-    
+        if (name === 'cityId') {
+            setSelectedCityId(value);
+            localStorage.setItem('selectedCityId', value);
+        } else if (name === 'pollingPlaceId') {
+            setSelectedPollingPlaceId(value);
+            localStorage.setItem('selectedPollingPlaceId', value);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -47,17 +87,19 @@ const SurveyForm = () => {
         setSuccess(null);
 
         const postData = {
-            ageGroup: surveyData.age, // Assuming 'ageGroup' corresponds to 'age' in your server-side model
+            ageGroup: surveyData.age,
             gender: surveyData.gender,
             pollingPlaceId: parseInt(surveyData.pollingPlaceId),
             partyId: parseInt(surveyData.partyId)
         };
 
-        console.log(postData,111)
+        console.log(postData, 111);
 
         try {
             await dynamicFetch('https://localhost:44338/api/Votes', 'POST', postData);
             setSuccess("Survey submitted successfully!");
+            // Reset the page after submission
+            window.location.reload();
         } catch (error) {
             console.error("Error submitting survey:", error);
             setError("Failed to submit survey.");
@@ -70,70 +112,47 @@ const SurveyForm = () => {
                 <Col md={6}>
                     <h2 className="mb-4 text-center">Survey Form</h2>
                     <Form onSubmit={handleSubmit}>
-               
+                        <CitySelection
+                            cities={cities}
+                            selectedCityId={selectedCityId}
+                            onChange={handleInputChange}
+                        />
 
-                        <Form.Group controlId="formPollingPlace">
-                            <Form.Label>Polling Place</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="pollingPlaceId"
-                                value={surveyData.pollingPlaceId}
-                                onChange={handleInputChange}
-                                required
-                            >
-                                <option value="">Select a polling place</option>
-                                {pollingPlaces.map(place => (
-                                    <option key={place.id} value={place.id}>{place.name}</option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>
+                        <PollingPlaceSelection
+                            filteredPollingPlaces={filteredPollingPlaces}
+                            selectedPollingPlaceId={selectedPollingPlaceId}
+                            onChange={handleInputChange}
+                        />
 
-                        <Form.Group controlId="formAge">
-                            <Form.Label>Age</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="age"
-                                value={surveyData.age}
-                                onChange={handleInputChange}
-                                placeholder="Enter age"
-                                required
-                            />
-                        </Form.Group>
+                        <CheckboxGroup
+                            options={[
+                                { label: '18-30 vjeq', value: '18-30' },
+                                { label: '30-50 vjeq', value: '30-50' },
+                                { label: 'Mbi 50 vjeq', value: '50+' }
+                            ]}
+                            selectedValue={surveyData.age}
+                            groupName="age"
+                            onChange={handleInputChange}
+                        />
 
-                        <Form.Group controlId="formGender">
-                            <Form.Label>Gender</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="gender"
-                                value={surveyData.gender}
-                                onChange={handleInputChange}
-                                required
-                            >
-                                <option value="">Select gender</option>
-                                <option value="M">M</option>
-                                <option value="F">F</option>
-                            </Form.Control>
-                        </Form.Group>
+                        <CheckboxGroup
+                            options={[
+                                { label: 'Male', value: 'M' },
+                                { label: 'Female', value: 'F' }
+                            ]}
+                            selectedValue={surveyData.gender}
+                            groupName="gender"
+                            onChange={handleInputChange}
+                        />
 
-                        <Form.Group controlId="formParty">
-                            <Form.Label>Party</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="partyId"
-                                value={surveyData.partyId}
-                                onChange={handleInputChange}
-                                required
-                            >
-                                <option value="">Select a party</option>
-                                {parties.map(party => (
-                                    <option key={party.id} value={party.id}>{party.name}</option>
-                                ))}
-                            </Form.Control>
-                        </Form.Group>
+                        {/* Render PartiesSelection component */}
+                        <PartiesSelection
+                            parties={parties}
+                            selectedPartyId={surveyData.partyId}
+                            onChange={handleInputChange}
+                        />
 
-                        <Button variant="primary" type="submit" className="w-100 mt-3">
-                            Submit Survey
-                        </Button>
+                        <SubmitButton onSubmit={handleSubmit} />
                     </Form>
 
                     {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
