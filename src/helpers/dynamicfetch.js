@@ -1,20 +1,32 @@
-export const dynamicFetch = async (url, method, postData) => {
-    const response = await fetch(url, {
+const dynamicFetch = async (url, method, postData = null) => {
+    const options = {
         method,
         headers: {
-            "Content-Type": "application/json" // This header is crucial for JSON data
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(postData)
-    });
+    };
 
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (postData) {
+        options.body = JSON.stringify(postData);
     }
 
-    const contentType = response.headers.get("Content-Type");
-    if (contentType && contentType.includes("application/json")) {
-        return await response.json(); // Parse response as JSON
-    } else {
-        throw new Error("Received response is not JSON");
+    try {
+        const response = await fetch(url, options);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const contentType = response.headers.get("Content-Type");
+        if (contentType && contentType.includes("application/json")) {
+            return await response.json(); // Parse response as JSON
+        } else {
+            throw new Error("Received response is not JSON");
+        }
+    } catch (error) {
+        console.error("Fetch error:", error);
+        throw error;
     }
 };
+
+export default dynamicFetch;

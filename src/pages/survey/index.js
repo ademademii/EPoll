@@ -1,6 +1,11 @@
-export default function Survey(){
+// survey.js
+import SurveyForm from '@/Components/Survey';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-    return <>
-    <h1> Hello I am Survey...</h1>
-    </>
+export default function SurveyPage() {
+    return (
+      
+            <SurveyForm />
+       
+    );
 }

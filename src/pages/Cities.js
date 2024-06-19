@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { dynamicFetch } from "@/helpers/dynamicfetch";
+import { useState, useEffect } from "react";
+import dynamicFetch from "@/helpers/dynamicfetch";
+
 export default function Cities() {
     const [cityData, setCityData] = useState({
         name: "",
@@ -10,6 +11,21 @@ export default function Cities() {
         stateId: ""
     });
     const [addedCity, setAddedCity] = useState(null); // State to hold the added city data
+    const [cities, setCities] = useState([]); // State to hold the fetched cities
+
+    useEffect(() => {
+        // Fetch cities when the component mounts
+        const fetchCities = async () => {
+            try {
+                const responseData = await dynamicFetch('https://localhost:44338/api/Cities', 'GET');
+                setCities(responseData);
+            } catch (error) {
+                console.error("Failed to fetch cities:", error);
+            }
+        };
+
+        fetchCities();
+    }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -24,6 +40,15 @@ export default function Cities() {
             const responseData = await dynamicFetch('https://localhost:44338/api/Cities', 'POST', cityData);
             console.log("City added successfully:", responseData);
             setAddedCity(responseData); // Set the added city data to state
+            setCities([...cities, responseData]); // Update cities state to include the newly added city
+            setCityData({
+                name: "",
+                descriptions: "",
+                population: "",
+                zipCode: "",
+                area: "",
+                stateId: ""
+            }); // Reset cityData state for next entry
         } catch (error) {
             console.error("Failed to add city:", error);
         }
@@ -52,6 +77,24 @@ export default function Cities() {
                     <p>Area: {addedCity.area}</p>
                     <p>State ID: {addedCity.stateId}</p>
                 </div>
+            )}
+            <h2>All Cities</h2>
+            {cities.length > 0 ? (
+                <ul>
+                    {cities.map(city => (
+                        <li key={city.id}>
+                            <p>ID: {city.id}</p>
+                            <p>Name: {city.name}</p>
+                            <p>Descriptions: {city.descriptions}</p>
+                            <p>Population: {city.population}</p>
+                            <p>Zip Code: {city.zipCode}</p>
+                            <p>Area: {city.area}</p>
+                            <p>State ID: {city.stateId}</p>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>No cities found.</p>
             )}
         </div>
     );
