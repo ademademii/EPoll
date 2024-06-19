@@ -18,6 +18,8 @@ namespace ExitPoll.Data
         public DbSet<PollingPlace> PollingPlaces { get; set;}
         public DbSet<Vote> Votes { get; set; }
         public DbSet<Party> Parties { get; set; }
+        public DbSet<User> Users { get; set; }
+
 
 
 

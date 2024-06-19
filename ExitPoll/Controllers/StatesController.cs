@@ -1,6 +1,7 @@
 ﻿using ExitPoll.Data;
 using ExitPoll.Models;
 using ExitPoll.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -39,7 +40,7 @@ namespace ExitPoll.Controllers
 
 
         [EnableCors("AllowOrigin")]
-        // POST api/<StatesController>
+        [Authorize(Policy = "AdminPolicy")]        // POST api/<StatesController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] StateViewModel stateViewModel)
         {
