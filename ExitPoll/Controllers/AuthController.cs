@@ -26,6 +26,82 @@ namespace ExitPoll.Controllers
             _configuration = configuration;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetUsers(string sort = "asc")
+        {
+            IQueryable<User> users;
+            switch (sort)
+            {
+                case "desc":
+                    users = _db.Users.OrderByDescending(x => x.Id);
+                    break;
+                case "asc":
+                    users = _db.Users.OrderBy(x => x.Id);
+                    break;
+                default:
+                    users = _db.Users;
+                    break;
+            }
+            return Ok(users);
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var user = await _db.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return BadRequest("This object does not exist in the database...");
+            }
+
+            return Ok(user);
+
+
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, User user)
+        {
+            var entity = await _db.Users.FindAsync(id);
+
+            if (ModelState.IsValid)
+            {
+                entity.Name= user.Name;
+                entity.Surname= user.Surname;
+                entity.UserName= user.UserName;
+                entity.Password = HashPassword(user.Password);
+                entity.Email= user.Email;
+                entity.Role = user.Role;
+
+                _db.Users.Update(entity);
+                await _db.SaveChangesAsync();
+                return Ok("Updated successfully...");
+            }
+            else
+            {
+                return BadRequest("Update failed. Please check the data and try again...");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var user = await _db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return BadRequest("No records found to delete...");
+            }
+            else
+            {
+                _db.Users.Remove(user);
+                await _db.SaveChangesAsync();
+                return Ok("Deleted successfully...");
+            }
+         
+        }
+
         [HttpPost("Authenticate")]
         public IActionResult CreateToken([FromBody] LoginModel login)
         {
@@ -69,7 +145,7 @@ namespace ExitPoll.Controllers
                 UserName = createUserModel.UserName,
                 Password = HashPassword(createUserModel.Password),
                 Email = createUserModel.Email,// Hash the password before saving (implement HashPassword method)
-                Role = "User" // Example role assignment
+                Role = createUserModel.Role // Example role assignment
                 // Add other properties as needed
             };
 
@@ -134,6 +210,8 @@ namespace ExitPoll.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+
+       
 
 
 

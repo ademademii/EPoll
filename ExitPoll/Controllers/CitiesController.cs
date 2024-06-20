@@ -22,7 +22,6 @@ namespace ExitPoll.Controllers
         }
 
 
-        [EnableCors("AllowOrigin")]
         // GET: api/<CitiesController>
         [HttpGet]
         public async Task<IActionResult> Get(string sort="asc")
