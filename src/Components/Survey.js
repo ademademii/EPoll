@@ -1,12 +1,16 @@
-// SurveyForm.js
+// components/SurveyForm.js
+
 import React, { useState, useEffect } from 'react';
-import { Container, Form, Alert, Row, Col } from 'react-bootstrap';
+import { Container, Form, Alert, Row, Col, Button } from 'react-bootstrap';
+import { useRouter } from 'next/router';
 import dynamicFetch from '@/helpers/dynamicfetch';
 import CitySelection from './CitySelection';
 import PollingPlaceSelection from './PollingPlaceSelection';
 import CheckboxGroup from './CheckboxGroup';
 import SubmitButton from './SubmitButton';
 import PartiesSelection from './PartiesSelection'; // Import PartiesSelection component
+import ProfileBox from './ProfileBox'; // Import ProfileBox component
+import { jwtDecode } from 'jwt-decode';
 
 const SurveyForm = () => {
     const [cities, setCities] = useState([]);
@@ -24,6 +28,8 @@ const SurveyForm = () => {
     const [selectedPollingPlaceId, setSelectedPollingPlaceId] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [user, setUser] = useState(null); // State to hold user data
+    const router = useRouter();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -52,6 +58,20 @@ const SurveyForm = () => {
                 ...surveyData,
                 cityId: storedCityId,
                 pollingPlaceId: storedPollingPlaceId
+            });
+        }
+
+        // Check if user is already authenticated
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            const name = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+            const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+            console.log(name)
+
+            setUser({
+                username: name,
+                role: role
             });
         }
     }, []);
@@ -93,8 +113,6 @@ const SurveyForm = () => {
             partyId: parseInt(surveyData.partyId)
         };
 
-        console.log(postData, 111);
-
         try {
             await dynamicFetch('https://localhost:44338/api/Votes', 'POST', postData);
             setSuccess("Survey submitted successfully!");
@@ -106,10 +124,19 @@ const SurveyForm = () => {
         }
     };
 
+    const handleLogout = () => {
+        setUser(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        router.push('/login'); // Redirect to login page after logout
+    };
+
     return (
         <Container className="py-4">
             <Row className="justify-content-center">
                 <Col md={6}>
+                    {user && <ProfileBox user={user} onLogout={handleLogout} />}
+
                     <h2 className="mb-4 text-center">Survey Form</h2>
                     <Form onSubmit={handleSubmit}>
                         <CitySelection

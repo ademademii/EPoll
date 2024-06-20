@@ -1,10 +1,14 @@
-import { useState } from 'react';
-import { Container, Form, Button, Alert } from 'react-bootstrap';
-import { useRouter } from 'next/router';
+// components/LoginForm.js
 
-export default function LoginForm(){
+import React, { useState } from 'react';
+import { Container, Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { useRouter } from 'next/router';
+import { jwtDecode } from 'jwt-decode';
+import dynamicFetch from '@/helpers/dynamicfetch';
+const LoginForm = () => {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
     const handleInputChange = (e) => {
@@ -15,18 +19,43 @@ export default function LoginForm(){
         });
     };
 
-    const handleLogin = (e) => {
-        e.preventDefault(); // Prevent default form submission
-        setError(null); // Reset error state
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setError(null);
+        setIsLoading(true);
 
-        // Simulate authentication logic (replace with actual backend API call in real scenario)
-        if (credentials.username === 'agent' && credentials.password === 'password') {
-            router.push('/survey'); // Redirect to survey page upon successful login
-        } else if (credentials.username === 'admin' && credentials.password === 'passi') {
-            router.push('/dashboard');
-        }
-        else {
+        try {
+            const response = await dynamicFetch('https://localhost:44338/api/Auth/Authenticate', 'POST', {
+                userName: credentials.username,
+                password: credentials.password,
+            });
+            
+            console.log(response,"response")
+
+            if (response.token) {
+                const decodedToken = jwtDecode(response.token);
+                const role = decodedToken.Role;
+                const role1 = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+                console.log(decodedToken,"decoded");
+                console.log(role1,"role")
+
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('role', role);
+
+                if (role1 === 'Agent') {
+                    router.push('/survey');
+                } else if (role1 === 'Admin') {
+                    router.push('/dashboard');
+                } else {
+                    setError("Unauthorized role");
+                }
+            } else {
+                setError("Invalid credentials. Please try again.");
+            }
+        } catch (error) {
             setError("Invalid credentials. Please try again.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -59,8 +88,8 @@ export default function LoginForm(){
                         />
                     </Form.Group>
 
-                    <Button variant="light" type="submit" className="w-100">
-                        Login
+                    <Button variant="light" type="submit" className="w-100" disabled={isLoading}>
+                        {isLoading ? <Spinner animation="border" size="sm" /> : 'Login'}
                     </Button>
                 </Form>
 
@@ -70,3 +99,4 @@ export default function LoginForm(){
     );
 };
 
+export default LoginForm;

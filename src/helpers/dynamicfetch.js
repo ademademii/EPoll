@@ -18,10 +18,16 @@ const dynamicFetch = async (url, method, postData = null) => {
         }
 
         const contentType = response.headers.get("Content-Type");
-        if (contentType && contentType.includes("application/json")) {
-            return await response.json(); // Parse response as JSON
+        if (contentType) {
+            if (contentType.includes("application/json")) {
+                return await response.json(); // Parse response as JSON
+            } else if (contentType.includes("text")) {
+                return await response.text(); // Parse response as text
+            } else {
+                throw new Error(`Unsupported response type: ${contentType}`);
+            }
         } else {
-            throw new Error("Received response is not JSON");
+            throw new Error("Content-Type header is missing in the response");
         }
     } catch (error) {
         console.error("Fetch error:", error);
