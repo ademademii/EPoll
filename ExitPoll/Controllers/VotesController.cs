@@ -90,7 +90,6 @@ namespace ExitPoll.Controllers
 
         // POST api/<VotesController>
 
-        [Authorize(Policy = "AdminPolicy")]        // POST api/<StatesController>
         [HttpPost]
 
         public async Task<IActionResult> Post([FromBody] VoteViewModel voteVM)
