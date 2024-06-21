@@ -27,6 +27,27 @@ public class ResultsController : ControllerBase
         return Ok(result);
     }
 
+
+    [HttpGet("GetVotesCountForParty")]
+    public async Task<IActionResult> GetVotesCountForParty(string partyName)
+    {
+        // Assuming partyName is "PDK" in this example
+        string partyNameToFind = await _db.Parties.Where(x => x.Name.Equals(partyName));
+
+        // Find the party with the given name
+        var party = await _db.Parties.FirstOrDefaultAsync(p => p.Name == partyNameToFind);
+
+        if (party == null)
+        {
+            return NotFound(); // Handle if the party is not found
+        }
+
+        // Count votes for the party
+        int voteCount = await _db.Votes.CountAsync(v => v.PartyId == party.Id);
+
+        return Ok(voteCount);
+    }
+
     //[HttpGet("CountVotesPerParty")]
     //public async Task<IActionResult> CountVotesPerParty(string partyNameInput)
     //{

@@ -39,8 +39,6 @@ namespace ExitPoll.Controllers
         }
 
 
-        [EnableCors("AllowOrigin")]
-        [Authorize(Policy = "AdminPolicy")]        // POST api/<StatesController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] StateViewModel stateViewModel)
         {
