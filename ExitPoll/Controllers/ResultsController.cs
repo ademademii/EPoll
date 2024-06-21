@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using System.Threading.Tasks;
 using ExitPoll.Data;
 using System.Runtime.CompilerServices;
+using ExitPoll.Models.ViewModels;
 
 public class ResultsController : ControllerBase
 {
@@ -14,28 +15,12 @@ public class ResultsController : ControllerBase
         _db = db;
     }
 
-    [HttpGet("CountVotes")]
-    public async Task<IActionResult> CountVotes(string partia)
+
+    [HttpGet("GetVotesAndPartyName")]
+    public async Task<IActionResult> GetVotesAndPartyName(string partyName)
     {
-        var parameter = new Microsoft.Data.SqlClient.SqlParameter("@PARTIA", partia);
-        var count = await _db.Database
-            .ExecuteSqlRawAsync("EXEC COUNTNRVOTAVE @PARTIA", parameter);
-
-        // Construct a JSON object with the count
-        var result = new { Count = count };
-
-        return Ok(result);
-    }
-
-
-    [HttpGet("GetVotesCountForParty")]
-    public async Task<IActionResult> GetVotesCountForParty(string partyName)
-    {
-        // Assuming partyName is "PDK" in this example
-        string partyNameToFind = await _db.Parties.Where(x => x.Name.Equals(partyName));
-
         // Find the party with the given name
-        var party = await _db.Parties.FirstOrDefaultAsync(p => p.Name == partyNameToFind);
+        var party = await _db.Parties.FirstOrDefaultAsync(p => p.Name == partyName);
 
         if (party == null)
         {
@@ -45,32 +30,43 @@ public class ResultsController : ControllerBase
         // Count votes for the party
         int voteCount = await _db.Votes.CountAsync(v => v.PartyId == party.Id);
 
-        return Ok(voteCount);
+        // Prepare result object
+        var result = new PartyVotesResult
+        {
+            PartyName = party.Name,
+            VoteCount = voteCount
+        };
+
+        return Ok(result);
     }
 
-    //[HttpGet("CountVotesPerParty")]
-    //public async Task<IActionResult> CountVotesPerParty(string partyNameInput)
-    //{
-    //    var partyName = await _db.Parties.FirstOrDefaultAsync(p => p.Name.Equals(partyNameInput));
 
-    //    return Ok(partyName);
-    //}
+    [HttpGet("GetAllPartiesWithVotes")]
+    public async Task<IActionResult> GetAllPartiesWithVotes()
+    {
+        var parties = await _db.Parties.ToListAsync();
+
+    
+        List<PartyVotesResult> results = new List<PartyVotesResult>();
+
+        foreach (var party in parties)
+        {
+
+            int voteCount = await _db.Votes.CountAsync(v => v.PartyId == party.Id);
+
+    
+            var result = new PartyVotesResult
+            {
+                PartyName = party.Name,
+                VoteCount = voteCount
+            };
 
 
-    //[HttpGet("CountVotesPerParty")]
-    //public async Task<IActionResult> CountVotesPerParty(string partyNameInput)
-    //{
-    //    var party = await _db.Parties.Include(p => p.Votes)
-    //                                  .FirstOrDefaultAsync(p => p.Name.Equals(partyNameInput));
+            results.Add(result);
+        }
 
-    //    if (party == null)
-    //    {
-    //        return NotFound("Party not found");
-    //    }
+        return Ok(results);
+    }
 
-    //    int voteCount = party.Votes.Count;
-
-    //    return Ok(voteCount);
-    //}
 
 }
