@@ -1,8 +1,9 @@
 // pages/dashboard.js
 import React, { useState } from 'react';
-import { Container, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import Sidebar from './SideBar';
-import CRUDForm from './CRUDform';
+import CrudForm from './CRUDform';
+
 const fieldConfigs = {
   project: [
     { name: 'name', label: 'Name', type: 'text' },
@@ -47,53 +48,51 @@ const endpoints = {
     read: 'https://localhost:44338/api/Projects',
     create: 'https://localhost:44338/api/Projects',
     update: 'https://localhost:44338/api/Projects/{id}',
-    delete: 'https://localhost:44338/api/Projects',
+    delete: 'https://localhost:44338/api/Projects/{id}',
   },
   state: {
     read: 'https://localhost:44338/api/States',
     create: 'https://localhost:44338/api/States',
     update: 'https://localhost:44338/api/States/{id}',
-    delete: 'https://localhost:44338/api/States',
+    delete: 'https://localhost:44338/api/States/{id}',
   },
   city: {
     read: 'https://localhost:44338/api/Cities',
     create: 'https://localhost:44338/api/Cities',
     update: 'https://localhost:44338/api/Cities/{id}',
-    delete: 'https://localhost:44338/api/Cities',
+    delete: 'https://localhost:44338/api/Cities/{id}',
   },
   votingPlace: {
     read: 'https://localhost:44338/api/PollingPlaces?sort=desc',
     create: 'https://localhost:44338/api/PollingPlaces',
     update: 'https://localhost:44338/api/PollingPlaces/{id}',
-    delete: 'https://localhost:44338/api/PollingPlaces',
+    delete: 'https://localhost:44338/api/PollingPlaces/{id}',
   },
   parties: {
     read: 'https://localhost:44338/api/Parties',
     create: 'https://localhost:44338/api/Parties',
     update: 'https://localhost:44338/api/Parties/{id}',
-    delete: 'https://localhost:44338/api/Parties',
+    delete: 'https://localhost:44338/api/Parties/{id}',
   },
   votes: {
     read: 'https://localhost:44338/api/Votes',
     create: 'https://localhost:44338/api/Votes',
     update: 'https://localhost:44338/api/Votes/{id}',
-    delete: 'https://localhost:44338/api/Votes',
+    delete: 'https://localhost:44338/api/Votes/{id}',
   },
   users: {
     read: 'https://localhost:44338/api/Users',
     create: 'https://localhost:44338/api/Users',
     update: 'https://localhost:44338/api/Users/{id}',
-    delete: 'https://localhost:44338/api/Users',
+    delete: 'https://localhost:44338/api/Users/{id}',
   },
 };
 
 const DashboardC = () => {
   const [selectedArea, setSelectedArea] = useState(null);
-  const [mode, setMode] = useState('read');
 
   const handleSelect = (area) => {
     setSelectedArea(area);
-    setMode('read'); // Default to read mode
   };
 
   return (
@@ -105,15 +104,8 @@ const DashboardC = () => {
         <Col md={9}>
           {selectedArea && endpoints[selectedArea] ? (
             <div>
-              <ButtonGroup className="mb-3">
-                <Button onClick={() => setMode('create')}>Create</Button>
-                <Button onClick={() => setMode('read')}>Read</Button>
-                <Button onClick={() => setMode('update')}>Update</Button>
-                <Button onClick={() => setMode('delete')}>Delete</Button>
-              </ButtonGroup>
-              <CRUDForm
+              <CrudForm
                 endpoints={endpoints[selectedArea]}
-                mode={mode}
                 formFields={fieldConfigs[selectedArea]}
               />
             </div>

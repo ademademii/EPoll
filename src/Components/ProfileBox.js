@@ -53,11 +53,11 @@ const ProfileBox = ({ onLogout }) => {
                 <>
                     <p><strong>Username:</strong> {user.name}</p>
                     <p><strong>Role:</strong> {user.role}</p>
-                    <Button variant="outline-danger border-5" onClick={handleLogout} className="mb-2" block>
+                    <Button variant="outline-danger border-5" onClick={handleLogout} className="mb-2" block={true}>
                         Logout
                     </Button> 
                     {user.role === 'Admin' && (
-                        <Button variant="outline-primary  border-5" onClick={handleGoToSurvey} className='mb-2' block>
+                        <Button variant="outline-primary  border-5" onClick={handleGoToSurvey} className='mb-2' block={true}>
                             {router.pathname === '/dashboard' ? 'Go to Survey Form' : 'Go to Dashboard'}
                         </Button>
                     )}
