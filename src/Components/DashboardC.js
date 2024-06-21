@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Sidebar from './SideBar';
 import CrudForm from './CRUDform';
+import VoteChart from './VoteChart';
+
 
 const fieldConfigs = {
   project: [
@@ -104,6 +106,7 @@ const DashboardC = () => {
         <Col md={9}>
           {selectedArea && endpoints[selectedArea] ? (
             <div>
+                  <VoteChart />
               <CrudForm
                 endpoints={endpoints[selectedArea]}
                 formFields={fieldConfigs[selectedArea]}
