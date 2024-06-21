@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import ProfileBox from '@/Components/ProfileBox';
 import { jwtDecode } from 'jwt-decode';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import DashboardC from '@/Components/DashboardC';
 
 const Dashboard = () => {
     const router = useRouter();
@@ -18,7 +18,6 @@ const Dashboard = () => {
             const decodedToken = jwtDecode(token); // Assuming you have a function like jwtDecode
             const name = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
             const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-            console.log(name)
 
             setUser({
                 username: name,
@@ -38,22 +37,22 @@ const Dashboard = () => {
     };
 
     return (
-        <>
-            {user ? (
-                <div className="d-flex justify-content-between align-items-center">
-                    <h1>Hello, {user.userName}!</h1>
-                    <ProfileBox user={user} onLogout={handleLogout} />
-                </div>
-            ) : null}
+        <div className="container-fluid border border-danger ">
+            <header className="d-flex justify-content-between align-items-center pr-5">
+                <h1 className="text-primary">Dashboard</h1>
+                {user && <ProfileBox user={user} onLogout={handleLogout} />}
+            </header>
 
-            {/* Dashboard content here */}
-            <p>This is your dashboard content...</p>
+            {/* Main content */}
+            <div className="container mt-4">
+                <DashboardC />
+            </div>
 
-            {/* Logout Button (optional, can be in ProfileBox as well) */}
+            {/* Optional Logout Button (can also be in ProfileBox) */}
             {/* <Button variant="danger" onClick={handleLogout}>
                 Logout
             </Button> */}
-        </>
+        </div>
     );
 };
 

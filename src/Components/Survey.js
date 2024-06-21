@@ -1,5 +1,4 @@
 // components/SurveyForm.js
-
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Alert, Row, Col, Button } from 'react-bootstrap';
 import { useRouter } from 'next/router';
@@ -8,8 +7,8 @@ import CitySelection from './CitySelection';
 import PollingPlaceSelection from './PollingPlaceSelection';
 import CheckboxGroup from './CheckboxGroup';
 import SubmitButton from './SubmitButton';
-import PartiesSelection from './PartiesSelection'; // Import PartiesSelection component
-import ProfileBox from './ProfileBox'; // Import ProfileBox component
+import PartiesSelection from './PartiesSelection';
+import ProfileBox from './ProfileBox';
 import { jwtDecode } from 'jwt-decode';
 
 const SurveyForm = () => {
@@ -29,6 +28,7 @@ const SurveyForm = () => {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
     const [user, setUser] = useState(null); // State to hold user data
+    const [showProfile, setShowProfile] = useState(false); // State to manage profile box visibility
     const router = useRouter();
 
     useEffect(() => {
@@ -61,13 +61,11 @@ const SurveyForm = () => {
             });
         }
 
-        // Check if user is already authenticated
         const token = localStorage.getItem('token');
         if (token) {
             const decodedToken = jwtDecode(token);
             const name = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
             const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-            console.log(name)
 
             setUser({
                 username: name,
@@ -133,10 +131,22 @@ const SurveyForm = () => {
 
     return (
         <Container className="py-4">
+            {user && (
+                <div className="profile-box-container">
+                    <Button 
+                        variant="primary" 
+                        className="d-md-none" 
+                        onClick={() => setShowProfile(!showProfile)}
+                    >
+                        {showProfile ? 'Hide Profile' : 'Show Profile'}
+                    </Button>
+                    <div className={`profile-box ${showProfile ? 'd-block' : 'd-none d-md-block'}`}>
+                        <ProfileBox user={user} onLogout={handleLogout} />
+                    </div>
+                </div>
+            )}
             <Row className="justify-content-center">
                 <Col md={6}>
-                    {user && <ProfileBox user={user} onLogout={handleLogout} />}
-
                     <h2 className="mb-4 text-center">Survey Form</h2>
                     <Form onSubmit={handleSubmit}>
                         <CitySelection
@@ -172,7 +182,6 @@ const SurveyForm = () => {
                             onChange={handleInputChange}
                         />
 
-                        {/* Render PartiesSelection component */}
                         <PartiesSelection
                             parties={parties}
                             selectedPartyId={surveyData.partyId}
@@ -186,6 +195,22 @@ const SurveyForm = () => {
                     {success && <Alert variant="success" className="mt-3">{success}</Alert>}
                 </Col>
             </Row>
+            <style jsx>{`
+                .profile-box-container {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 1000;
+                }
+                .profile-box {
+                    display: none;
+                }
+                @media (min-width: 768px) {
+                    .profile-box {
+                        display: block;
+                    }
+                }
+            `}</style>
         </Container>
     );
 };
