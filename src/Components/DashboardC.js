@@ -97,7 +97,7 @@ const DashboardC = () => {
   };
 
   return (
-    <Container fluid className='ppp border border-secondary p-5'>
+    <Container fluid className='p-5'>
       <Row>
         <Col md={3}>
           <Sidebar onSelect={(area) => handleSelect(area)} />
