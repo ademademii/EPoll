@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ExitPoll.Models;
 using ExitPoll.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ExitPoll.Controllers
@@ -18,36 +20,79 @@ namespace ExitPoll.Controllers
         }
         // GET: api/<VotesController>
         [HttpGet]
-        public async Task<IActionResult> Get(string sort="asc")
+        public async Task<IActionResult> Get(string sort = "asc")
         {
-            IQueryable<Vote> votes;
+            IQueryable<VoteViewModel> voteViewModels;
 
-            switch(sort)
+            switch (sort)
             {
                 case "desc":
-                    votes = _db.Votes.OrderByDescending(x => x.Id);
+                    voteViewModels = _db.Votes.OrderByDescending(x => x.Id)
+                                              .Select(v => new VoteViewModel
+                                              {
+                                                  Id = v.Id,
+                                                  AgeGroup = v.AgeGroup,
+                                                  Gender = v.Gender,
+                                                  PollingPlaceId = v.PollingPlaceId,
+                                                  PartyId = v.PartyId
+                                              });
                     break;
                 case "asc":
-                    votes = _db.Votes.OrderBy(x => x.Id);
+                    voteViewModels = _db.Votes.OrderBy(x => x.Id)
+                                              .Select(v => new VoteViewModel
+                                              {
+                                                  Id = v.Id,
+                                                  AgeGroup = v.AgeGroup,
+                                                  Gender = v.Gender,
+                                                  PollingPlaceId = v.PollingPlaceId,
+                                                  PartyId = v.PartyId
+                                              });
                     break;
                 default:
-                    votes= _db.Votes;
+                    voteViewModels = _db.Votes.Select(v => new VoteViewModel
+                    {
+                        Id = v.Id,
+                        AgeGroup = v.AgeGroup,
+                        Gender = v.Gender,
+                        PollingPlaceId = v.PollingPlaceId,
+                        PartyId = v.PartyId
+                    });
                     break;
             }
 
-            return Ok(votes);
+            return Ok(voteViewModels);
         }
+
 
         // GET api/<VotesController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var vote = await _db.Votes.FindAsync(id);   
-            return Ok(vote);
+            var vote = await _db.Votes.FindAsync(id);
+
+            if (vote == null)
+            {
+                return NotFound();
+            }
+
+            var voteViewModel = new VoteViewModel
+            {
+                Id = vote.Id,
+                AgeGroup = vote.AgeGroup,
+                Gender = vote.Gender,
+                PollingPlaceId = vote.PollingPlaceId,
+                PartyId = vote.PartyId
+            };
+
+            return Ok(voteViewModel);
         }
 
+
         // POST api/<VotesController>
+
+        [Authorize(Policy = "AdminPolicy")]        // POST api/<StatesController>
         [HttpPost]
+
         public async Task<IActionResult> Post([FromBody] VoteViewModel voteVM)
         {
             if (ModelState.IsValid)
