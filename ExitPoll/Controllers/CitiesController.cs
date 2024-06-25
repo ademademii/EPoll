@@ -74,6 +74,7 @@ namespace ExitPoll.Controllers
             return Ok(cities);
         }
 
+
         // POST api/<CitiesController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CityViewModel cityViewModel)

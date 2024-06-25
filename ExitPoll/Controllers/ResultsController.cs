@@ -42,7 +42,7 @@ public class ResultsController : ControllerBase
 
 
     [HttpGet("GetAllPartiesWithVotesAndPercentage")]
-    public async Task<IActionResult> GetAllPartiesWithVotesAndPercentage()
+    public async Task<IActionResult> GetAllPartiesWithVotesAndPercentage(int projectId)
     {
   
         var parties = await _db.Parties.ToListAsync();
@@ -53,7 +53,7 @@ public class ResultsController : ControllerBase
 
         foreach (var party in parties)
         {
-            int voteCount = await _db.Votes.CountAsync(v => v.PartyId == party.Id);
+            int voteCount = await _db.Votes.CountAsync(v => v.PartyId == party.Id && v.ProjectId==projectId);
 
             double percentage = totalVotes > 0 ? (double)voteCount / totalVotes * 100 : 0;
 

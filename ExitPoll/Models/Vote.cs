@@ -12,6 +12,10 @@ namespace ExitPoll.Models
         public PollingPlace PollingPlace { get; set; }
         public int PartyId { get; set; }
         public Party Party { get; set; }
+        public int ProjectId { get; set; }
+
+        public int UserId {  get; set; }
+        //public Project Project { get; set; }
 
         
     }

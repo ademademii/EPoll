@@ -79,6 +79,7 @@ namespace ExitPoll.Controllers
             entity.StartDate = projectVM.StartDate;
             entity.EndDate = projectVM.EndDate;
             entity.Status = projectVM.Status;
+            entity.StateId = projectVM.StateId;
             _db.SaveChanges();
             return Ok("Updated successfully...");
 
@@ -86,16 +87,16 @@ namespace ExitPoll.Controllers
 
         // DELETE api/<ProjectsController>/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var project = _db.Projects.Find(id);
+            var project = await _db.Projects.FindAsync(id);
             if(project == null)
             {
                 return NotFound();
             }
             _db.Projects.Remove(project);
             _db.SaveChanges();
-            return Ok();
+            return Ok("Deleted successfully...");
         }
     }
 }

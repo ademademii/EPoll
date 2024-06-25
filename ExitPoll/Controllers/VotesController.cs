@@ -34,7 +34,10 @@ namespace ExitPoll.Controllers
                                                   AgeGroup = v.AgeGroup,
                                                   Gender = v.Gender,
                                                   PollingPlaceId = v.PollingPlaceId,
-                                                  PartyId = v.PartyId
+                                                  PartyId = v.PartyId,
+                                                  ProjectId = v.ProjectId,
+                                                  UserId = v.UserId
+                                                  //ProjectId = v.ProjectId
                                               });
                     break;
                 case "asc":
@@ -45,7 +48,10 @@ namespace ExitPoll.Controllers
                                                   AgeGroup = v.AgeGroup,
                                                   Gender = v.Gender,
                                                   PollingPlaceId = v.PollingPlaceId,
-                                                  PartyId = v.PartyId
+                                                  PartyId = v.PartyId,
+                                                  ProjectId=v.ProjectId,
+                                                  UserId=v.UserId
+                                                  //ProjectId = v.ProjectId
                                               });
                     break;
                 default:
@@ -55,7 +61,10 @@ namespace ExitPoll.Controllers
                         AgeGroup = v.AgeGroup,
                         Gender = v.Gender,
                         PollingPlaceId = v.PollingPlaceId,
-                        PartyId = v.PartyId
+                        PartyId = v.PartyId,
+                        ProjectId = v.ProjectId,
+                        UserId = v.UserId
+                        //ProjectId= v.ProjectId
                     });
                     break;
             }
@@ -81,7 +90,10 @@ namespace ExitPoll.Controllers
                 AgeGroup = vote.AgeGroup,
                 Gender = vote.Gender,
                 PollingPlaceId = vote.PollingPlaceId,
-                PartyId = vote.PartyId
+                PartyId = vote.PartyId,
+                ProjectId = vote.ProjectId,
+                UserId = vote.UserId
+                //ProjectId = vote.ProjectId
             };
 
             return Ok(voteViewModel);
@@ -102,7 +114,10 @@ namespace ExitPoll.Controllers
                     AgeGroup = voteVM.AgeGroup,
                     Gender = voteVM.Gender,
                     PollingPlaceId = voteVM.PollingPlaceId,
-                    PartyId = voteVM.PartyId
+                    PartyId = voteVM.PartyId,
+                    ProjectId = voteVM.ProjectId,
+                    UserId = voteVM.UserId
+                    //ProjectId= voteVM.ProjectId
                 };
                 _db.Votes.Add(vote);
                 await _db.SaveChangesAsync();
@@ -111,33 +126,33 @@ namespace ExitPoll.Controllers
             return BadRequest(ModelState);
         }
 
-        // PUT api/<VotesController>/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] VoteViewModel voteVM)
-        {
-            var vote = await _db.Votes.FindAsync(id);
-            if(ModelState.IsValid)
-            {
-                vote.PartyId = voteVM.PartyId;
-                await _db.SaveChangesAsync();
-                return Ok("Vote updated successfully...");
-            }
-            return BadRequest(ModelState);
-        }
+        //// PUT api/<VotesController>/5
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> Put(int id, [FromBody] VoteViewModel voteVM)
+        //{
+        //    var vote = await _db.Votes.FindAsync(id);
+        //    if(ModelState.IsValid)
+        //    {
+        //        vote.PartyId = voteVM.PartyId;
+        //        await _db.SaveChangesAsync();
+        //        return Ok("Vote updated successfully...");
+        //    }
+        //    return BadRequest(ModelState);
+        //}
 
 
-        // DELETE api/<VotesController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var vote = await _db.Votes.FindAsync(id);
-            if(vote == null)
-            {
-                return BadRequest("No votes founded to be delteted with this id");
-            }
-            _db.Votes.Remove(vote);
-            await _db.SaveChangesAsync();
-            return Ok("Vote deleted successfully...");
-        }
+        //// DELETE api/<VotesController>/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var vote = await _db.Votes.FindAsync(id);
+        //    if(vote == null)
+        //    {
+        //        return BadRequest("No votes founded to be delteted with this id");
+        //    }
+        //    _db.Votes.Remove(vote);
+        //    await _db.SaveChangesAsync();
+        //    return Ok("Vote deleted successfully...");
+        //}
     }
 }

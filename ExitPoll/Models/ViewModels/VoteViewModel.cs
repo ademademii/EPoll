@@ -9,5 +9,7 @@ namespace ExitPoll.Models.ViewModels
         public char Gender { get; set; }
         public int PollingPlaceId {  get; set; }
         public int PartyId { get; set; }
+        public int ProjectId {  get; set; }
+        public int UserId { get; set; }
     }
 }
