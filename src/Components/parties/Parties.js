@@ -84,7 +84,7 @@ const Parties = () => {
                 initialValues={currentParty || {}}
                 formFields={[
                     { name: 'name', label: 'Party Name', type: 'text' },
-                    { name: 'description', label: 'Description', type: 'text' },
+                    { name: 'ideology', label: 'Description', type: 'text' },
                     { name: 'foundedYear', label: 'Founded Year', type: 'number' }
                 ]}
                 title={modalTitle}
@@ -94,7 +94,7 @@ const Parties = () => {
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Description</th>
+                        <th>Ideology</th>
                         <th>Founded Year</th>
                         <th>Actions</th>
                     </tr>

@@ -69,7 +69,7 @@ const ProfileBox = ({ onLogout }) => {
                         <>
                             <p><strong>Username:</strong> {user.name}</p>
                             <p><strong>Role:</strong> {user.role}</p>
-                            <Button variant="outline-danger" onClick={handleLogout} className="mb-2" block>
+                            <Button variant="outline-danger" onClick={handleLogout} className="mb-2" block  style={{ marginRight: '8px' }}> 
                                 Logout
                             </Button>
                             {user.role === 'Admin' && (

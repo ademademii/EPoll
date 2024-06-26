@@ -44,7 +44,7 @@ const Users = () => {
 
     const handleUpdate = async (userData) => {
         try {
-            await dynamicFetch(`https://localhost:44338/api/Auth/${currentUserId}`, 'PUT', userData);
+            await dynamicFetch(`https://localhost:44338/api/Auth/${currentUser.id}`, 'PUT', userData); // Fix for currentUserId
             setShowModal(false);
             refreshUsers();
         } catch (error) {
@@ -88,7 +88,10 @@ const Users = () => {
                     { name: 'userName', label: 'Username', type: 'text' },
                     { name: 'password', label: 'Password', type: 'password' },
                     { name: 'email', label: 'Email', type: 'email' },
-                    { name: 'role', label: 'Role', type: 'text' }
+                    { name: 'role', label: 'Role', type: 'select', options: [
+                        { label: 'Admin', value: 'Admin' },
+                        { label: 'Agent', value: 'Agent' }
+                    ]}
                 ]}
                 title={modalTitle}
             />
