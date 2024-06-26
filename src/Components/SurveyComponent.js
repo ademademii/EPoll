@@ -64,13 +64,19 @@ const SurveyForm = () => {
             const decodedToken = jwtDecode(token);
             const name = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
             const role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+            const projectId = decodedToken.ProjectId;
+            const userId = decodedToken.UserId;
+            console.log(projectId,'projectId');
 
             setUser({
                 username: name,
-                role: role
+                role: role,
+                projectId:projectId,
+                userId:userId
             });
         }
     }, []);
+    
 
     useEffect(() => {
         if (surveyData.cityId) {
@@ -106,14 +112,17 @@ const SurveyForm = () => {
             ageGroup: surveyData.age,
             gender: surveyData.gender,
             pollingPlaceId: parseInt(surveyData.pollingPlaceId),
-            partyId: parseInt(surveyData.partyId)
+            partyId: parseInt(surveyData.partyId),
+            projectId: user.projectId,
+            userId: user.userId
+            
         };
+        console.log(postData,'postdata')
 
         try {
             await dynamicFetch('https://localhost:44338/api/Votes', 'POST', postData);
             setSuccess("Survey submitted successfully!");
             // Reset the page after submission
-            window.location.reload();
         } catch (error) {
             console.error("Error submitting survey:", error);
             setError("Failed to submit survey.");

@@ -38,6 +38,7 @@ const ModalForm = ({ show, onHide, onSubmit, initialValues, formFields, title })
                                     value={formValues[field.name] || ''}
                                     onChange={handleChange}
                                 >
+                                    <option value="">Select</option> {/* Adding default "Select" option */}
                                     {field.options.map(option => (
                                         <option key={option.value} value={option.value}>
                                             {option.label}
@@ -55,7 +56,7 @@ const ModalForm = ({ show, onHide, onSubmit, initialValues, formFields, title })
                         </Form.Group>
                     ))}
                     <Button variant="primary" type="submit">
-                        Create
+                        Save
                     </Button>
                 </Form>
             </Modal.Body>

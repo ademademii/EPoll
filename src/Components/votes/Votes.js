@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import dynamicFetch from '@/helpers/dynamicfetch'; // Replace with actual path to dynamicFetch
 import { Table, Container } from 'react-bootstrap';
-
+import { jwtDecode } from 'jwt-decode';
 const VotesComponent = () => {
     const [votes, setVotes] = useState([]);
     const [pollingPlaces, setPollingPlaces] = useState([]);
     const [parties, setParties] = useState([]);
+
+    const token = localStorage.getItem('token');
+
 
     useEffect(() => {
         const fetchVotes = async () => {
@@ -51,6 +54,10 @@ const VotesComponent = () => {
                         <th>Gender</th>
                         <th>Polling Place</th>
                         <th>Party</th>
+                        <th>ProjectId</th>
+                        <th>UserId</th>
+
+
                     </tr>
                 </thead>
                 <tbody>
@@ -61,6 +68,10 @@ const VotesComponent = () => {
                             <td>{vote.gender}</td>
                             <td>{getPollingPlaceName(vote.pollingPlaceId)}</td>
                             <td>{getPartyName(vote.partyId)}</td>
+                            <td>{vote.projectId}</td>
+                            <td>{vote.userId}</td>
+
+
                         </tr>
                     ))}
                 </tbody>

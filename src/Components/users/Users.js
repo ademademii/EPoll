@@ -6,6 +6,7 @@ import UserTableRow from './UserTableRow';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
+    const [projects, setProjects] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
     const [modalTitle, setModalTitle] = useState('');
@@ -15,6 +16,9 @@ const Users = () => {
             try {
                 const usersData = await dynamicFetch('https://localhost:44338/api/Auth', 'GET');
                 setUsers(usersData);
+
+                const projectsData = await dynamicFetch('https://localhost:44338/api/Projects', 'GET');
+                setProjects(projectsData);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -40,6 +44,7 @@ const Users = () => {
         } catch (error) {
             console.error('Error creating user:', error);
         }
+        console.log(userData, '222');
     };
 
     const handleUpdate = async (userData) => {
@@ -73,6 +78,11 @@ const Users = () => {
         setShowModal(false);
     };
 
+    const getProjectNameById = (id) => {
+        const project = projects.find(p => p.id === id);
+        return project ? project.name : 'Unknown Project';
+    };
+
     return (
         <Container fluid id="users" className="h-100">
             <h2 className="my-4 text-center">Manage Users</h2>
@@ -88,10 +98,16 @@ const Users = () => {
                     { name: 'userName', label: 'Username', type: 'text' },
                     { name: 'password', label: 'Password', type: 'password' },
                     { name: 'email', label: 'Email', type: 'email' },
-                    { name: 'role', label: 'Role', type: 'select', options: [
-                        { label: 'Admin', value: 'Admin' },
-                        { label: 'Agent', value: 'Agent' }
-                    ]}
+                    {
+                        name: 'projectId',
+                        label: 'Project',
+                        type: 'select',
+                        options: projects.map(project => ({
+                            value: project.id,
+                            label: project.name
+                        }))
+                    },
+                    { name: 'role', label: 'Role', type: 'text' },
                 ]}
                 title={modalTitle}
             />
@@ -104,6 +120,7 @@ const Users = () => {
                         <th>Username</th>
                         <th>Email</th>
                         <th>Role</th>
+                        <th>Project</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -112,6 +129,7 @@ const Users = () => {
                         <UserTableRow
                             key={user.id}
                             user={user}
+                            projectName={getProjectNameById(user.projectId)}
                             onUpdate={() => openModal(user)}
                             onDelete={() => handleDelete(user.id)}
                         />
