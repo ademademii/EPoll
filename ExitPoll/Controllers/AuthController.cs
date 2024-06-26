@@ -73,6 +73,7 @@ namespace ExitPoll.Controllers
                 entity.UserName= user.UserName;
                 entity.Password = HashPassword(user.Password);
                 entity.Email= user.Email;
+                entity.ProjectId= user.ProjectId;
                 entity.Role = user.Role;
 
                 _db.Users.Update(entity);
@@ -144,7 +145,8 @@ namespace ExitPoll.Controllers
                 Surname=createUserModel.Surname,
                 UserName = createUserModel.UserName,
                 Password = HashPassword(createUserModel.Password),
-                Email = createUserModel.Email,// Hash the password before saving (implement HashPassword method)
+                Email = createUserModel.Email,
+                ProjectId=createUserModel.ProjectId,// Hash the password before saving (implement HashPassword method)
                 Role = createUserModel.Role // Example role assignment
                 // Add other properties as needed
             };
@@ -195,7 +197,9 @@ namespace ExitPoll.Controllers
             var claims = new[]
             {
         new Claim(ClaimTypes.Name, user.UserName),
-        new Claim(ClaimTypes.Role, user.Role)
+        new Claim(ClaimTypes.Role, user.Role),
+        new Claim("ProjectId",user.ProjectId.ToString()),
+        new Claim("UserId",user.Id.ToString())
         // You can add more claims here if needed
     };
 

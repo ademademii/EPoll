@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExitPoll.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240625213234_projectVote")]
+    [Migration("20240626190625_projectVote")]
     partial class projectVote
     {
         /// <inheritdoc />

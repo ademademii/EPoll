@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExitPoll.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240619181118_User1")]
-    partial class User1
+    [Migration("20240626192956_projectUser")]
+    partial class projectUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -196,6 +196,9 @@ namespace ExitPoll.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -233,6 +236,12 @@ namespace ExitPoll.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("PollingPlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
