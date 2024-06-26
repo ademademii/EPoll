@@ -1,14 +1,13 @@
-// components/SurveyForm.js
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Alert, Row, Col, Button } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import dynamicFetch from '@/helpers/dynamicfetch';
-import CitySelection from './CitySelection';
-import PollingPlaceSelection from './PollingPlaceSelection';
-import CheckboxGroup from './CheckboxGroup';
-import SubmitButton from './SubmitButton';
-import PartiesSelection from './PartiesSelection';
-import ProfileBox from './ProfileBox';
+import CitySelection from './survey/CitySelection';
+import PollingPlaceSelection from './survey/PollingPlaceSelection';
+import CheckboxGroup from './survey/CheckboxGroup';
+import SubmitButton from './common/SubmitButton';
+import PartiesSelection from './survey/PartiesSelection';
+import ProfileBox from './common/ProfileBox';
 import { jwtDecode } from 'jwt-decode';
 
 const SurveyForm = () => {
@@ -28,7 +27,6 @@ const SurveyForm = () => {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
     const [user, setUser] = useState(null); // State to hold user data
-    const [showProfile, setShowProfile] = useState(false); // State to manage profile box visibility
     const router = useRouter();
 
     useEffect(() => {
@@ -133,14 +131,7 @@ const SurveyForm = () => {
         <Container className="py-4">
             {user && (
                 <div className="profile-box-container">
-                    <Button 
-                        variant="primary" 
-                        className="d-md-none" 
-                        onClick={() => setShowProfile(!showProfile)}
-                    >
-                        {showProfile ? 'Hide Profile' : 'Show Profile'}
-                    </Button>
-                    <div className={`profile-box ${showProfile ? 'd-block' : 'd-none d-md-block'}`}>
+                    <div className={`profile-box`}>
                         <ProfileBox user={user} onLogout={handleLogout} />
                     </div>
                 </div>
@@ -203,12 +194,7 @@ const SurveyForm = () => {
                     z-index: 1000;
                 }
                 .profile-box {
-                    display: none;
-                }
-                @media (min-width: 768px) {
-                    .profile-box {
-                        display: block;
-                    }
+                    display: block;
                 }
             `}</style>
         </Container>

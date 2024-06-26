@@ -1,13 +1,15 @@
 import React from 'react';
 import { Container, Row, Col, Navbar, Nav } from 'react-bootstrap';
 import { useRouter } from 'next/router';
-import ProfileBox from '@/Components/ProfileBox';
+import ProfileBox from '@/Components/common/ProfileBox';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import DashboardC from '@/Components/DashboardC';
-import AuthenticatedRoute from '@/Components/AuthenticateRoute';
+import AuthenticatedRoute from '@/Components/authetication/AuthenticateRoute';
+import { useState } from 'react';
+import DashboardC from '@/Components/DashboardComponent';
 
 const Dashboard = () => {
     const router = useRouter();
+    const [showProjects, setShowProjects] = useState(false);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -18,7 +20,7 @@ const Dashboard = () => {
     return (
         <AuthenticatedRoute allowedRoles={['Admin']}>
             <Container fluid className="p-4">
-                <Navbar bg="secondary" expand="lg">
+                <Navbar bg="dark" expand="lg">
                     <Container fluid>
                         <Navbar.Brand className="text-white" style={{ fontSize: '2rem' }}>Dashboard</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -30,11 +32,12 @@ const Dashboard = () => {
                     </Container>
                 </Navbar>
 
-                <Container fluid className="border border border-5 mt-4">
+                <Container fluid className=" mt-4">
                     <Row>
-                        <Col>
-                            <DashboardC />
-                        </Col>
+                    <Col >
+                 <DashboardC/>
+                </Col>
+               
                     </Row>
                 </Container>
             </Container>

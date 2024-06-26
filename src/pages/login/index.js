@@ -5,7 +5,7 @@
 
 
 import React from 'react';
-import LoginForm from '@/Components/LoginForm';  
+import LoginForm from '@/Components/authetication/LoginForm';  
 
   export default function Login(){
       return <>

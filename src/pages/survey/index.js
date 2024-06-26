@@ -1,7 +1,7 @@
 // pages/survey.js
 import React from 'react';
-import AuthenticatedRoute from '@/Components/AuthenticateRoute';
-import SurveyForm from '@/Components/Survey';
+import AuthenticatedRoute from '@/Components/authetication/AuthenticateRoute';
+import SurveyForm from '@/Components/SurveyComponent';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
