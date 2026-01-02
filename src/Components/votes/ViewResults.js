@@ -16,8 +16,11 @@ const ViewResults = () => {
     const [partiesWithVotes, setPartiesWithVotes] = useState([]);
     const [projectId, setProjectId] = useState('');
     const [projects, setProjects] = useState([]);
+    const [gender, setGender] = useState('');
+    const [ageGroup, setAgeGroup] = useState('');
     const [error, setError] = useState('');
 
+    // Fetch all projects on component mount
     useEffect(() => {
         const fetchProjects = async () => {
             try {
@@ -28,36 +31,34 @@ const ViewResults = () => {
                 setError('Error fetching projects. Please try again.');
             }
         };
-
         fetchProjects();
     }, []);
 
-    const fetchResults = async (id) => {
+    // Fetch results with optional filters
+    const fetchResults = async () => {
+        if (!projectId) {
+            setError('Please select a valid project.');
+            return;
+        }
+
         try {
-            console.log(`Fetching results for project ID: ${id}`); // Debugging log
-            const data = await dynamicFetch(`https://localhost:44338/GetAllPartiesWithVotesAndPercentage/?projectid=${id}`, 'GET');
-            console.log('Fetched data:', data); // Debugging log
+            // Build query with optional filters
+            let url = `https://localhost:44338/GetAllPartiesWithVotesAndPercentage?projectId=${projectId}`;
+            if (gender) url += `&gender=${gender}`;
+            if (ageGroup) url += `&ageGroup=${ageGroup}`;
+
+            console.log('Fetching results from:', url);
+            const data = await dynamicFetch(url, 'GET');
             setPartiesWithVotes(data);
             setError('');
-        } catch (error) {
-            console.error('Error fetching results:', error); // Debugging log
+        } catch (err) {
+            console.error('Error fetching results:', err);
             setError('Error fetching results. Please try again.');
             setPartiesWithVotes([]);
         }
     };
 
-    const handleSelectChange = (e) => {
-        setProjectId(e.target.value);
-    };
-
-    const handleButtonClick = () => {
-        if (projectId) {
-            fetchResults(projectId);
-        } else {
-            setError('Please select a valid project.');
-        }
-    };
-
+    // Chart.js data
     const chartData = {
         labels: partiesWithVotes.map(party => party.partyName),
         datasets: [
@@ -95,11 +96,17 @@ const ViewResults = () => {
     return (
         <Container fluid id="view-results" className="h-100">
             <h2 className="my-4 text-center">View Results</h2>
+
             <Row className="mb-4">
                 <Col md={{ span: 6, offset: 3 }}>
                     <Form className="justify-content-center">
-                        <Form.Group>
-                            <Form.Control as="select" value={projectId} onChange={handleSelectChange}>
+                        {/* Project Select */}
+                        <Form.Group className="mb-3">
+                            <Form.Control
+                                as="select"
+                                value={projectId}
+                                onChange={e => setProjectId(e.target.value)}
+                            >
                                 <option value="">Select Project</option>
                                 {projects.map(project => (
                                     <option key={project.id} value={project.id}>
@@ -108,13 +115,44 @@ const ViewResults = () => {
                                 ))}
                             </Form.Control>
                         </Form.Group>
-                        <Button variant="primary" onClick={handleButtonClick}>
+
+                        {/* Gender Filter */}
+                        <Form.Group className="mb-3">
+                            <Form.Control
+                                as="select"
+                                value={gender}
+                                onChange={e => setGender(e.target.value)}
+                            >
+                                <option value="">Select Gender (Optional)</option>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                                <option value="other">Other</option>
+                            </Form.Control>
+                        </Form.Group>
+
+                        {/* Age Group Filter */}
+                        <Form.Group className="mb-3">
+                            <Form.Control
+                                as="select"
+                                value={ageGroup}
+                                onChange={e => setAgeGroup(e.target.value)}
+                            >
+                                <option value="">Select Age Group (Optional)</option>
+                                <option value="18-30">18-30</option>
+                                <option value="30-50">30-50</option>
+                                <option value="50+">50+</option>
+                            </Form.Control>
+                        </Form.Group>
+
+                        <Button variant="primary" onClick={fetchResults}>
                             Kerko Rezultatet
                         </Button>
+
+                        {error && <p className="text-danger text-center mt-3">{error}</p>}
                     </Form>
-                    {error && <p className="text-danger text-center mt-3">{error}</p>}
                 </Col>
             </Row>
+
             <Row>
                 <Col md={6}>
                     <Table striped bordered hover responsive className="flex-grow-1">
@@ -126,18 +164,18 @@ const ViewResults = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {partiesWithVotes.map((party) => (
-                                <tr key={party.partyId}>
+                            {partiesWithVotes.map(party => (
+                                <tr key={party.partyName}>
                                     <td>{party.partyName}</td>
                                     <td>{party.voteCount}</td>
-                                    <td>{party.percentage}%</td>
+                                    <td>{party.percentage.toFixed(2)}%</td>
                                 </tr>
                             ))}
                         </tbody>
                     </Table>
                 </Col>
                 <Col md={6}>
-                    <Pie data={chartData} width={800} height={800} /> {/* Adjust the size here */}
+                    <Pie data={chartData} width={800} height={800} />
                 </Col>
             </Row>
         </Container>
