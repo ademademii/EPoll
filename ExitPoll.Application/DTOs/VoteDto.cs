@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ExitPoll.Models.ViewModels
+namespace ExitPoll.Application.DTOs
 {
-    public class VoteViewModel
+    public class VoteDto
     {
         public int Id { get; set; }
         public string AgeGroup { get; set; }

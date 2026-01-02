@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ExitPoll.Models
+namespace ExitPoll.Domain.Entities
 {
     public class PollingPlace
     {

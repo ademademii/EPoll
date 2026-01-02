@@ -1,8 +1,7 @@
-﻿using ExitPoll.Domain;
-
-namespace ExitPoll.Domain.Models.ViewModels
+﻿
+namespace ExitPoll.Application.DTOs
 {
-    public class CityViewModel
+    public class CityDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

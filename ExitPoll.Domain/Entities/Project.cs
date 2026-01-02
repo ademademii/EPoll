@@ -1,18 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ExitPoll.Models.ViewModels
+namespace ExitPoll.Domain.Entities
 {
-    public class ProjectViewModel
+    public class Project
     {
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
         [Required]
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate{ get; set; }
         [Required]
         public DateTime EndDate { get; set; }
         public string Status { get; set; }
         public int StateId { get; set; }
+        public State State { get; set; }
+
+
+
     }
 }

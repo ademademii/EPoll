@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ExitPoll.Models
+namespace ExitPoll.Domain.Entities
 {
     public class User
     {

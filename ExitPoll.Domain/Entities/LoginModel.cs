@@ -1,4 +1,4 @@
-﻿namespace ExitPoll.Models
+﻿namespace ExitPoll.Domain.Entities
 {
     public class LoginModel
     {
