@@ -2,8 +2,7 @@
 using ExitPoll.Domain.Interfaces;
 using ExitPoll.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
 
 namespace ExitPoll.Infrastructure.Repositories
 {

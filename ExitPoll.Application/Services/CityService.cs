@@ -2,9 +2,7 @@
 using ExitPoll.Domain.Interfaces;
 using ExitPoll.Domain.Entities;
 using ExitPoll.Application.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace ExitPoll.Application.Services
 {

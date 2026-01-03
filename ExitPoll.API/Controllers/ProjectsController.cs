@@ -9,60 +9,60 @@ namespace ExitPoll.API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class CitysController : ControllerBase
+    public class ProjectsController : ControllerBase
     {
-        private readonly ICityService _CityService;
+        private readonly IProjectService _ProjectService;
 
-        public CitysController(ICityService CityService)
+        public ProjectsController(IProjectService ProjectService)
         {
-            _CityService = CityService;
+            _ProjectService = ProjectService;
         }
 
-        // GET: api/<CitysController>
+        // GET: api/<ProjectsController>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var Citys = await _CityService.GetAllAsync();
-            return Ok(Citys);
+            var Projects = await _ProjectService.GetAllAsync();
+            return Ok(Projects);
         }
 
-        // GET api/<CitysController>/5
+        // GET api/<ProjectsController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var City = await _CityService.GetByIdAsync(id);
-            return Ok(City);
+            var Project = await _ProjectService.GetByIdAsync(id);
+            return Ok(Project);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CityDto dto)
+        public async Task<IActionResult> Post([FromBody] ProjectDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var id = await _CityService.CreateAsync(dto);
+            var id = await _ProjectService.CreateAsync(dto);
 
             return CreatedAtAction(nameof(Get), new { id }, id);
         }
 
 
 
-        // PUT api/<CitysController>/5
+        // PUT api/<ProjectsController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] CityDto dto)
+        public async Task<IActionResult> Put(int id, [FromBody] ProjectDto dto)
         {
             if (id != dto.Id) return BadRequest();
 
-            await _CityService.UpdateAsync(dto);
+            await _ProjectService.UpdateAsync(dto);
             return NoContent();
         }
 
 
-        // DELETE api/<CitysController>/5
+        // DELETE api/<ProjectsController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _CityService.DeleteAsync(id);
+            await _ProjectService.DeleteAsync(id);
             return NoContent();
         }
 

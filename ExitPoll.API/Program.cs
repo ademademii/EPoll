@@ -80,10 +80,13 @@ builder.Services.AddCors(options =>
 // Repositories
 builder.Services.AddScoped<IStateRepository, StateRepository>();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
 // Services
 builder.Services.AddScoped<IStateService, StateService>();
 builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+
 
 // -------------------------
 // Build app
