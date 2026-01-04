@@ -32,7 +32,7 @@ const SurveyForm = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const citiesData = await dynamicFetch('https://localhost:44338/api/Cities', 'GET');
+                const citiesData = await dynamicFetch('https://localhost:44338/api/Citys', 'GET');
                 setCities(citiesData);
 
                 const pollingPlacesData = await dynamicFetch('https://localhost:44338/api/PollingPlaces', 'GET');

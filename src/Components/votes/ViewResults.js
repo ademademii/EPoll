@@ -43,7 +43,7 @@ const ViewResults = () => {
 
         try {
             // Build query with optional filters
-            let url = `https://localhost:44338/GetAllPartiesWithVotesAndPercentage?projectId=${projectId}`;
+            let url = `https://localhost:44338/api/Results/GetAllPartiesWithVotesAndPercentage?projectId=${projectId}`;
             if (gender) url += `&gender=${gender}`;
             if (ageGroup) url += `&ageGroup=${ageGroup}`;
 

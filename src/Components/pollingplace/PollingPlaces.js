@@ -18,7 +18,7 @@ const PollingPlaces = () => {
                 const pollingPlacesData = await dynamicFetch('https://localhost:44338/api/PollingPlaces', 'GET');
                 setPollingPlaces(pollingPlacesData);
 
-                const citiesData = await dynamicFetch('https://localhost:44338/api/Cities', 'GET');
+                const citiesData = await dynamicFetch('https://localhost:44338/api/Citys', 'GET');
                 setCities(citiesData);
             } catch (error) {
                 console.error('Error fetching data:', error);

@@ -4,8 +4,8 @@ import dynamicFetch from '@/helpers/dynamicfetch'; // Replace with actual path t
 import ModalForm from '../common/ModalForm';
 import CityTableRow from './CityTableRow'; // Update to match your file structure
 
-const Cities = () => {
-    const [cities, setCities] = useState([]);
+const Citys = () => {
+    const [Citys, setCitys] = useState([]);
     const [states, setStates] = useState([]); // State to store states for city display
 
     const [showModal, setShowModal] = useState(false);
@@ -15,8 +15,8 @@ const Cities = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const citiesData = await dynamicFetch('https://localhost:44338/api/Cities', 'GET');
-                setCities(citiesData);
+                const CitysData = await dynamicFetch('https://localhost:44338/api/Citys', 'GET');
+                setCitys(CitysData);
 
                 const statesData = await dynamicFetch('https://localhost:44338/api/States', 'GET');
                 setStates(statesData);
@@ -28,20 +28,20 @@ const Cities = () => {
         fetchData();
     }, []);
 
-    const refreshCities = async () => {
+    const refreshCitys = async () => {
         try {
-            const data = await dynamicFetch('https://localhost:44338/api/Cities', 'GET');
-            setCities(data);
+            const data = await dynamicFetch('https://localhost:44338/api/Citys', 'GET');
+            setCitys(data);
         } catch (error) {
-            console.error('Error fetching cities:', error);
+            console.error('Error fetching Citys:', error);
         }
     };
 
     const handleCreate = async (cityData) => {
         try {
-            await dynamicFetch('https://localhost:44338/api/Cities', 'POST', cityData);
+            await dynamicFetch('https://localhost:44338/api/Citys', 'POST', cityData);
             setShowModal(false);
-            refreshCities();
+            refreshCitys();
         } catch (error) {
             console.error('Error creating city:', error);
         }
@@ -49,9 +49,9 @@ const Cities = () => {
 
     const handleUpdate = async (cityData) => {
         try {
-            await dynamicFetch(`https://localhost:44338/api/Cities/${currentCity.id}`, 'PUT', cityData);
+            await dynamicFetch(`https://localhost:44338/api/Citys/${currentCity.id}`, 'PUT', cityData);
             setShowModal(false);
-            refreshCities();
+            refreshCitys();
         } catch (error) {
             console.error('Error updating city:', error);
         }
@@ -59,9 +59,9 @@ const Cities = () => {
 
     const handleDelete = async (cityId) => {
         try {
-            await dynamicFetch(`https://localhost:44338/api/Cities/${cityId}`, 'DELETE');
-            const updatedCities = cities.filter(city => city.id !== cityId);
-            setCities(updatedCities);
+            await dynamicFetch(`https://localhost:44338/api/Citys/${cityId}`, 'DELETE');
+            const updatedCitys = Citys.filter(city => city.id !== cityId);
+            setCitys(updatedCitys);
         } catch (error) {
             console.error('Error deleting city:', error);
         }
@@ -79,8 +79,8 @@ const Cities = () => {
     };
 
     return (
-        <Container fluid id="cities" className="h-100">
-            <h2 className="my-4 text-center">Manage Cities</h2>
+        <Container fluid id="Citys" className="h-100">
+            <h2 className="my-4 text-center">Manage Citys</h2>
             <Button onClick={() => openModal(null)} className="mb-3">Create City</Button>
             <ModalForm
                 show={showModal}
@@ -111,7 +111,7 @@ const Cities = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {cities.map((city) => (
+                    {Citys.map((city) => (
                         <CityTableRow
                             key={city.id}
                             city={city}
@@ -126,4 +126,4 @@ const Cities = () => {
     );
 };
 
-export default Cities;
+export default Citys;
