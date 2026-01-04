@@ -214,10 +214,5 @@ namespace ExitPoll.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-
-       
-
-
-
     }
 }
