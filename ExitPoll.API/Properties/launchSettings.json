@@ -6,7 +6,22 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
+      "applicationUrl": "https://localhost:44338"
+    }
+  }
+}
+
+/**
+{
+  "profiles": {
+    "ExitPoll.API": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
       "applicationUrl": "https://localhost:51603;http://localhost:51604"
     }
   }
 }
+**/
