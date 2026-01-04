@@ -81,12 +81,16 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IStateRepository, StateRepository>();
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IPartyRepository, PartyRepository>();
+builder.Services.AddScoped<IPollingPlaceRepository, PollingPlaceRepository>();
+
 
 // Services
 builder.Services.AddScoped<IStateService, StateService>();
 builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
-
+builder.Services.AddScoped<IPartyService, PartyService>();
+builder.Services.AddScoped<IPollingPlaceService, PollingPlaceService>();
 
 // -------------------------
 // Build app
