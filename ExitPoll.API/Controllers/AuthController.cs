@@ -1,5 +1,6 @@
 ﻿using ExitPoll.Application.DTOs;
 using ExitPoll.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace ExitPoll.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsers(string sort = "asc")
             => Ok(await _authService.GetUsersAsync(sort));
 
@@ -28,6 +30,7 @@ namespace ExitPoll.API.Controllers
         }
 
         [HttpPost("CreateUser")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateUser(CreateUserDto dto)
         {
             await _authService.CreateUserAsync(dto);
@@ -35,6 +38,7 @@ namespace ExitPoll.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUser(int id, CreateUserDto dto)
         {
             await _authService.UpdateUserAsync(id, dto);
@@ -42,6 +46,7 @@ namespace ExitPoll.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             await _authService.DeleteUserAsync(id);

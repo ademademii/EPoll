@@ -12,6 +12,7 @@ namespace ExitPoll.API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class StatesController : ControllerBase
     {
         private readonly IStateService _stateService;

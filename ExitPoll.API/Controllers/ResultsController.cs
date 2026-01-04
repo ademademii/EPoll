@@ -1,5 +1,6 @@
 ﻿using ExitPoll.Application.DTOs;
 using ExitPoll.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,6 +10,7 @@ namespace ExitPoll.API.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class ResultsController : ControllerBase
     {
         private readonly IResultsService _resultsService;
