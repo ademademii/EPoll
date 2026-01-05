@@ -10,7 +10,6 @@ namespace ExitPoll.API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     public class CitysController : ControllerBase
     {
         private readonly ICityService _CityService;
@@ -22,6 +21,7 @@ namespace ExitPoll.API.Controllers
 
         // GET: api/<CitysController>
         [HttpGet]
+        [Authorize(Roles = "Admin,Agent")]
         public async Task<IActionResult> Get()
         {
             var Citys = await _CityService.GetAllAsync();
@@ -29,6 +29,7 @@ namespace ExitPoll.API.Controllers
         }
 
         // GET api/<CitysController>/5
+        [Authorize(Roles = "Admin,Agent")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -38,6 +39,7 @@ namespace ExitPoll.API.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post([FromBody] CityDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -51,6 +53,7 @@ namespace ExitPoll.API.Controllers
 
         // PUT api/<CitysController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(int id, [FromBody] CityDto dto)
         {
             if (id != dto.Id) return BadRequest();
@@ -61,7 +64,9 @@ namespace ExitPoll.API.Controllers
 
 
         // DELETE api/<CitysController>/5
+
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _CityService.DeleteAsync(id);

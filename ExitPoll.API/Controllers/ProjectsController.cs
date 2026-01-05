@@ -10,7 +10,6 @@ namespace ExitPoll.API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectService _ProjectService;
@@ -22,6 +21,7 @@ namespace ExitPoll.API.Controllers
 
         // GET: api/<ProjectsController>
         [HttpGet]
+        [Authorize(Roles = "Admin,Agent")]
         public async Task<IActionResult> Get()
         {
             var Projects = await _ProjectService.GetAllAsync();
@@ -30,6 +30,7 @@ namespace ExitPoll.API.Controllers
 
         // GET api/<ProjectsController>/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Agent")]
         public async Task<IActionResult> Get(int id)
         {
             var Project = await _ProjectService.GetByIdAsync(id);
@@ -38,6 +39,7 @@ namespace ExitPoll.API.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post([FromBody] ProjectDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -51,6 +53,7 @@ namespace ExitPoll.API.Controllers
 
         // PUT api/<ProjectsController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(int id, [FromBody] ProjectDto dto)
         {
             if (id != dto.Id) return BadRequest();
@@ -62,6 +65,7 @@ namespace ExitPoll.API.Controllers
 
         // DELETE api/<ProjectsController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _ProjectService.DeleteAsync(id);
