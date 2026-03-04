@@ -1,9 +1,7 @@
 ﻿using ExitPoll.Application.DTOs;
 using ExitPoll.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,64 +10,62 @@ namespace ExitPoll.API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class StatesController : ControllerBase
+    public class MjekuSpecialistController : ControllerBase
     {
-        private readonly IStateService _stateService;
+        private readonly IMjekuSpecialistService _MjekuSpecialistService;
 
-        public StatesController(IStateService stateService)
+        public MjekuSpecialistController(IMjekuSpecialistService MjekuSpecialistService)
         {
-            _stateService = stateService;
+            _MjekuSpecialistService = MjekuSpecialistService;
         }
 
-        // GET: api/<StatesController>
         [HttpGet]
         [Authorize(Roles = "Admin,Agent")]
         public async Task<IActionResult> Get()
         {
-            var states = await _stateService.GetAllAsync();
-            return Ok(states);
+            var Mjeket = await _MjekuSpecialistService.GetAllAsync();
+            return Ok(Mjeket);
         }
 
-        // GET api/<StatesController>/5
-        [HttpGet("{id}")]
         [Authorize(Roles = "Admin,Agent")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var state = await _stateService.GetByIdAsync(id);
-            return Ok(state);
+            var MjekuSpecialist = await _MjekuSpecialistService.GetByIdAsync(id);
+            return Ok(MjekuSpecialist);
         }
 
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Post([FromBody] StateDto dto)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Post([FromBody] MjekuSpecialistDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var id = await _stateService.CreateAsync(dto);
+            var id = await _MjekuSpecialistService.CreateAsync(dto);
+
             return CreatedAtAction(nameof(Get), new { id }, id);
         }
 
 
 
-        // PUT api/<StatesController>/5
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Put(int id, [FromBody] StateDto dto)
+        public async Task<IActionResult> Put(int id, [FromBody] MjekuSpecialistDto dto)
         {
             if (id != dto.Id) return BadRequest();
 
-            await _stateService.UpdateAsync(dto);
+            await _MjekuSpecialistService.UpdateAsync(dto);
             return NoContent();
         }
 
 
-        // DELETE api/<StatesController>/5
+
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _stateService.DeleteAsync(id);
+            await _MjekuSpecialistService.DeleteAsync(id);
             return NoContent();
         }
 

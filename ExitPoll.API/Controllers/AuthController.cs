@@ -30,7 +30,7 @@ namespace ExitPoll.API.Controllers
         }
 
         [HttpPost("CreateUser")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateUser(CreateUserDto dto)
         {
             await _authService.CreateUserAsync(dto);

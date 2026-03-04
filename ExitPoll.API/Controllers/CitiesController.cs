@@ -39,8 +39,8 @@ namespace ExitPoll.API.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Post([FromBody] CityDto dto)
+        //[Authorize(Roles = "Admin")]
+       public async Task<IActionResult> Post([FromBody] CityDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 

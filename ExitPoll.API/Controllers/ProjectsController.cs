@@ -39,7 +39,7 @@ namespace ExitPoll.API.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post([FromBody] ProjectDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

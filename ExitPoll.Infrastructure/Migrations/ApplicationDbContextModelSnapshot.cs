@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ExitPoll.Migrations
+namespace ExitPoll.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace ExitPoll.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ExitPoll.Models.City", b =>
+            modelBuilder.Entity("ExitPoll.Domain.Entities.City", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,11 +31,9 @@ namespace ExitPoll.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Area")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Descriptions")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -58,7 +56,28 @@ namespace ExitPoll.Migrations
                     b.ToTable("Cities");
                 });
 
-            modelBuilder.Entity("ExitPoll.Models.Party", b =>
+            modelBuilder.Entity("ExitPoll.Domain.Entities.MjekuSpecialist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EmriMjekut")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Specialiteti")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Mjeket");
+                });
+
+            modelBuilder.Entity("ExitPoll.Domain.Entities.Party", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,7 +101,7 @@ namespace ExitPoll.Migrations
                     b.ToTable("Parties");
                 });
 
-            modelBuilder.Entity("ExitPoll.Models.PollingPlace", b =>
+            modelBuilder.Entity("ExitPoll.Domain.Entities.PollingPlace", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -117,7 +136,7 @@ namespace ExitPoll.Migrations
                     b.ToTable("PollingPlaces");
                 });
 
-            modelBuilder.Entity("ExitPoll.Models.Project", b =>
+            modelBuilder.Entity("ExitPoll.Domain.Entities.Project", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -153,7 +172,7 @@ namespace ExitPoll.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("ExitPoll.Models.State", b =>
+            modelBuilder.Entity("ExitPoll.Domain.Entities.State", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -173,7 +192,7 @@ namespace ExitPoll.Migrations
                     b.ToTable("States");
                 });
 
-            modelBuilder.Entity("ExitPoll.Models.User", b =>
+            modelBuilder.Entity("ExitPoll.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -213,7 +232,7 @@ namespace ExitPoll.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ExitPoll.Models.Vote", b =>
+            modelBuilder.Entity("ExitPoll.Domain.Entities.Vote", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -250,9 +269,9 @@ namespace ExitPoll.Migrations
                     b.ToTable("Votes");
                 });
 
-            modelBuilder.Entity("ExitPoll.Models.City", b =>
+            modelBuilder.Entity("ExitPoll.Domain.Entities.City", b =>
                 {
-                    b.HasOne("ExitPoll.Models.State", "State")
+                    b.HasOne("ExitPoll.Domain.Entities.State", "State")
                         .WithMany()
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -261,9 +280,9 @@ namespace ExitPoll.Migrations
                     b.Navigation("State");
                 });
 
-            modelBuilder.Entity("ExitPoll.Models.PollingPlace", b =>
+            modelBuilder.Entity("ExitPoll.Domain.Entities.PollingPlace", b =>
                 {
-                    b.HasOne("ExitPoll.Models.City", "City")
+                    b.HasOne("ExitPoll.Domain.Entities.City", "City")
                         .WithMany()
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -272,9 +291,9 @@ namespace ExitPoll.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("ExitPoll.Models.Project", b =>
+            modelBuilder.Entity("ExitPoll.Domain.Entities.Project", b =>
                 {
-                    b.HasOne("ExitPoll.Models.State", "State")
+                    b.HasOne("ExitPoll.Domain.Entities.State", "State")
                         .WithMany("Projects")
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -283,15 +302,15 @@ namespace ExitPoll.Migrations
                     b.Navigation("State");
                 });
 
-            modelBuilder.Entity("ExitPoll.Models.Vote", b =>
+            modelBuilder.Entity("ExitPoll.Domain.Entities.Vote", b =>
                 {
-                    b.HasOne("ExitPoll.Models.Party", "Party")
+                    b.HasOne("ExitPoll.Domain.Entities.Party", "Party")
                         .WithMany()
                         .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ExitPoll.Models.PollingPlace", "PollingPlace")
+                    b.HasOne("ExitPoll.Domain.Entities.PollingPlace", "PollingPlace")
                         .WithMany()
                         .HasForeignKey("PollingPlaceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -302,7 +321,7 @@ namespace ExitPoll.Migrations
                     b.Navigation("PollingPlace");
                 });
 
-            modelBuilder.Entity("ExitPoll.Models.State", b =>
+            modelBuilder.Entity("ExitPoll.Domain.Entities.State", b =>
                 {
                     b.Navigation("Projects");
                 });
