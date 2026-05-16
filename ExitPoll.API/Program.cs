@@ -117,7 +117,8 @@ builder.Services.AddScoped<IPollingPlaceRepository, PollingPlaceRepository>();
 builder.Services.AddScoped<IVoteRepository, VoteRepository>();
 builder.Services.AddScoped<IPartyVoteResultRepository, PartyVoteResultRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+builder.Services.AddScoped<IFushaPadelRepository, FushaPadelRepository>();
+builder.Services.AddScoped<IRezervimiFushesRepository, RezervimiFushesRepository>();
 // Services
 builder.Services.AddScoped<IStateService, StateService>();
 builder.Services.AddScoped<ICityService, CityService>();
@@ -127,7 +128,8 @@ builder.Services.AddScoped<IPollingPlaceService, PollingPlaceService>();
 builder.Services.AddScoped<IVoteService, VoteService>();
 builder.Services.AddScoped<IResultsService, ResultsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+builder.Services.AddScoped<IFushaPadelService, FushaPadelService>();
+builder.Services.AddScoped<IRezervimiFushesService, RezervimiFushesService>();
 // -------------------------
 // Build app
 // -------------------------

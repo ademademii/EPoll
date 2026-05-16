@@ -19,7 +19,8 @@ namespace ExitPoll.Infrastructure.Data
         public DbSet<Party> Parties { get; set; }
         public DbSet<User> Users { get; set; }
 
-
+        public DbSet<FushaPadel> FushaPadels { get; set; }
+        public DbSet<RezervimiFushes> RezervimiFushes { get; set; }
 
 
     }
