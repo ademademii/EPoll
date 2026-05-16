@@ -8,6 +8,8 @@ import Votes from './votes/Votes';
 import Users from './users/Users';
 import ViewResults from './votes/ViewResults';
 import Projects from './projects/Projects';
+import FushaPadels from './fushapadels/FushaPadels';
+import RezervimiFushes from './rezervimiFushes/RezervimiFushes';
 
 const DashboardC = () => {
     const [currentComponent, setCurrentComponent] = useState('ViewResults');
@@ -28,6 +30,8 @@ const DashboardC = () => {
                 {currentComponent === 'Votes' && <Votes />}
                 {currentComponent === 'Users' && <Users />}
                 {currentComponent === 'ViewResults' && <ViewResults />}
+                {currentComponent === 'FushaPadels' && <FushaPadels />}
+                {currentComponent === 'RezervimiFushes' && <RezervimiFushes />}
             </div>
         </div>
     );

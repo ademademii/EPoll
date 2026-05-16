@@ -56,6 +56,8 @@ const Sidebar = ({ onComponentChange }) => {
                 { eventKey: 'Votes', icon: <FaVoteYea style={iconStyle} />, label: 'Votes' },
                 { eventKey: 'Users', icon: <FaUser style={iconStyle} />, label: 'Users' },
                 { eventKey: 'ViewResults', icon: <FaChartBar style={iconStyle} />, label: 'View Results' },
+                { eventKey: 'FushaPadels', icon: <FaChartBar style={iconStyle} />, label: 'Fusha Padels' },
+                { eventKey: 'RezervimiFushes', icon: <FaChartBar style={iconStyle} />, label: 'Rezervimi i Fushes' }
             ].map((item) => (
                 <Nav.Item key={item.eventKey} className="mb-3">
                     <Nav.Link
